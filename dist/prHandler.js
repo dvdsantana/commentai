@@ -39,14 +39,14 @@ async function getPRDetails() {
     const prResponse = await octokit.pulls.get({
         owner: repository.owner.login,
         repo: repository.name,
-        pull_number: number,
+        pull_number: number
     });
     return {
         owner: repository.owner.login,
         repo: repository.name,
         pull_number: number,
         title: prResponse.data.title ?? '',
-        description: prResponse.data.body ?? '',
+        description: prResponse.data.body ?? ''
     };
 }
 exports.getPRDetails = getPRDetails;
@@ -56,7 +56,7 @@ async function createReviewComment(owner, repo, pull_number, comments) {
         repo,
         pull_number,
         comments,
-        event: 'COMMENT',
+        event: 'COMMENT'
     });
 }
 exports.createReviewComment = createReviewComment;
@@ -67,9 +67,9 @@ async function getDifferencesToAnalize(prDetails) {
     const excludePatterns = core
         .getInput('exclude')
         .split(',')
-        .map((s) => s.trim());
-    const filteredDiff = parsedDiff.filter((file) => {
-        return !excludePatterns.some((pattern) => (0, minimatch_1.minimatch)(file.to ?? '', pattern));
+        .map(s => s.trim());
+    const filteredDiff = parsedDiff.filter(file => {
+        return !excludePatterns.some(pattern => (0, minimatch_1.minimatch)(file.to ?? '', pattern));
     });
     return filteredDiff;
 }
@@ -100,7 +100,7 @@ async function getDiffFromPull(owner, repo, pull_number) {
         owner,
         repo,
         pull_number,
-        mediaType: { format: 'diff' },
+        mediaType: { format: 'diff' }
     });
     // @ts-expect-error - response.data is a string
     return response.data;
@@ -108,7 +108,7 @@ async function getDiffFromPull(owner, repo, pull_number) {
 async function getDiffFromCommitComparision(owner, repo, base, head) {
     const response = await octokit.repos.compareCommitsWithBasehead({
         headers: {
-            accept: 'application/vnd.github.v3.diff',
+            accept: 'application/vnd.github.v3.diff'
         },
         owner,
         repo,
@@ -117,4 +117,4 @@ async function getDiffFromCommitComparision(owner, repo, base, head) {
     });
     return String(response.data);
 }
-//# sourceMappingURL=prHandler.js.map
+//# sourceMappingURL=PRHandler.js.map
