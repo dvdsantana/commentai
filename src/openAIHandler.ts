@@ -1,7 +1,7 @@
-import * as core from '@actions/core';
-import OpenAI from 'openai';
-import { Chunk, File } from 'parse-diff';
-import { prDetails } from './prDetails';
+import * as core from '@actions/core'
+import OpenAI from 'openai'
+import { Chunk, File } from 'parse-diff'
+import { prDetails } from './prDetails'
 
 const OPENAI_API_KEY: string = core.getInput('OPENAI_API_KEY');
 const OPENAI_API_MODEL: string = core.getInput('OPENAI_API_MODEL');

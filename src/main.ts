@@ -1,6 +1,6 @@
-import parseDiff from 'parse-diff';
-import { analyzeCode } from './openAIHandler';
-import { createReviewComment, getPRDetails, getDifferencesToAnalize } from './prHandler';
+import parseDiff from 'parse-diff'
+import { analyzeCode } from './openAIHandler'
+import { createReviewComment, getPRDetails, getDifferencesToAnalize } from './prHandler'
 
 /**
  * The main function for the action.
