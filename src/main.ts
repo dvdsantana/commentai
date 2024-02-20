@@ -19,7 +19,7 @@ export async function run(): Promise<void> {
   const comments = await analyzeCode(filteredDiff, prDetails)
 
   if (comments.length === 0) {
-    console.log('Alright! Nothing to comment.')
+    console.log('Alright! Nothing to comment')
     return
   }
 
