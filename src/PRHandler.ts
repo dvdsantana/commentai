@@ -1,16 +1,16 @@
-import { readFileSync } from "fs";
-import * as core from "@actions/core";
-import { Octokit } from "@octokit/rest";
-import { PRDetails } from "./PRDetails";
-import parseDiff from "parse-diff";
-import { minimatch } from "minimatch";
+import { readFileSync } from 'fs';
+import * as core from '@actions/core';
+import { Octokit } from '@octokit/rest';
+import { prDetails } from './prDetails';
+import parseDiff from 'parse-diff';
+import { minimatch } from 'minimatch';
 
-const GITHUB_TOKEN: string = core.getInput("GITHUB_TOKEN");
+const GITHUB_TOKEN: string = core.getInput('GITHUB_TOKEN');
 const octokit = new Octokit({ auth: GITHUB_TOKEN });
 
-export async function getPRDetails(): Promise<PRDetails> {
+export async function getPRDetails(): Promise<prDetails> {
     const { repository, number } = JSON.parse(
-        readFileSync(process.env.GITHUB_EVENT_PATH || "", "utf8")
+        readFileSync(process.env.GITHUB_EVENT_PATH || '', 'utf8')
     );
     const prResponse = await octokit.pulls.get({
         owner: repository.owner.login,
@@ -21,8 +21,8 @@ export async function getPRDetails(): Promise<PRDetails> {
         owner: repository.owner.login,
         repo: repository.name,
         pull_number: number,
-        title: prResponse.data.title ?? "",
-        description: prResponse.data.body ?? "",
+        title: prResponse.data.title ?? '',
+        description: prResponse.data.body ?? '',
     };
 }
 
@@ -37,11 +37,11 @@ export async function createReviewComment(
         repo,
         pull_number,
         comments,
-        event: "COMMENT",
+        event: 'COMMENT',
     });
 }
 
-export async function getDifferencesToAnalize(prDetails: PRDetails): Promise<parseDiff.File[]> {
+export async function getDifferencesToAnalize(prDetails: prDetails): Promise<parseDiff.File[]> {
     let diff: string | null;
     
     diff = await getAllDifferences(prDetails);
@@ -49,43 +49,43 @@ export async function getDifferencesToAnalize(prDetails: PRDetails): Promise<par
     const parsedDiff = parseDiff(diff);
 
     const excludePatterns = core
-        .getInput("exclude")
-        .split(",")
+        .getInput('exclude')
+        .split(',')
         .map((s) => s.trim());
 
     const filteredDiff = parsedDiff.filter((file) => {
         return !excludePatterns.some((pattern) =>
-            minimatch(file.to ?? "", pattern)
+            minimatch(file.to ?? '', pattern)
         );
     });
 
     return filteredDiff;
 }
 
-async function getAllDifferences(prDetails: PRDetails): Promise<string | null> {
+async function getAllDifferences(prDetails: prDetails): Promise<string | null> {
     let diff: string | null;
     const eventData = JSON.parse(
-        readFileSync(process.env.GITHUB_EVENT_PATH ?? "", "utf8")
+        readFileSync(process.env.GITHUB_EVENT_PATH ?? '', 'utf8')
     );
 
-    if (eventData.action === "opened") {
+    if (eventData.action === 'opened') {
         diff = await getDiffFromPull(
             prDetails.owner,
             prDetails.repo,
             prDetails.pull_number
         );
-    } else if (eventData.action === "synchronize") {
+    } else if (eventData.action === 'synchronize') {
         const newBaseSha = eventData.before;
         const newHeadSha = eventData.after;
 
         diff = await getDiffFromCommitComparision(prDetails.owner, prDetails.repo, newBaseSha, newHeadSha);
     } else {
-        console.error("Unsupported event:", process.env.GITHUB_EVENT_NAME);
+        console.error('Unsupported event:', process.env.GITHUB_EVENT_NAME);
         return null;
     }
 
     if (!diff) {
-        console.log("No diff found");
+        console.log('No diff found');
         return null;
     }
 
@@ -101,7 +101,7 @@ async function getDiffFromPull(
         owner,
         repo,
         pull_number,
-        mediaType: { format: "diff" },
+        mediaType: { format: 'diff' },
     });
     // @ts-expect-error - response.data is a string
     return response.data;
@@ -115,7 +115,7 @@ async function getDiffFromCommitComparision(
 ): Promise<string | null> {
     const response = await octokit.repos.compareCommitsWithBasehead({
         headers: {
-            accept: "application/vnd.github.v3.diff",
+            accept: 'application/vnd.github.v3.diff',
         },
         owner,
         repo,
