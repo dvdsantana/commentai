@@ -100,7 +100,7 @@ async function getAIResponse(prompt) {
                 : {}),
             messages: [
                 {
-                    role: 'system',
+                    role: 'user',
                     content: prompt
                 }
             ]
