@@ -34,6 +34,7 @@ const parse_diff_1 = __importDefault(require("parse-diff"));
 const minimatch_1 = require("minimatch");
 const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
 const octokit = new rest_1.Octokit({ auth: GITHUB_TOKEN });
+//todo:
 async function getPRDetails() {
     const { repository, number } = JSON.parse((0, fs_1.readFileSync)(process.env.GITHUB_EVENT_PATH || '', 'utf8'));
     const prResponse = await octokit.pulls.get({

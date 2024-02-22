@@ -7,7 +7,7 @@ import { minimatch } from 'minimatch'
 
 const GITHUB_TOKEN: string = core.getInput('GITHUB_TOKEN')
 const octokit = new Octokit({ auth: GITHUB_TOKEN })
-
+//todo:
 export async function getPRDetails(): Promise<prDetails> {
   const { repository, number } = JSON.parse(
     readFileSync(process.env.GITHUB_EVENT_PATH || '', 'utf8')
