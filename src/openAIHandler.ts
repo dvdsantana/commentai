@@ -15,11 +15,11 @@ export async function analyzeCode(
   prDetails: prDetails
 ): Promise<Array<{ body: string; path: string; line: number }>> {
   const comments: Array<{ body: string; path: string; line: number }> = []
-
+  console.info(`the Key is: ${OPENAI_API_KEY}`)
+  console.info(`the Model is: ${OPENAI_API_MODEL}`)
   for (const file of parsedDiff) {
     if (file.to === '/dev/null') continue // Ignore deleted files
-    console.info(`the Key is: ${OPENAI_API_KEY}`)
-    console.info(`the Model is: ${OPENAI_API_MODEL}`)
+    
     console.info(`Analyzing the file: '${file.to}...` )
     for (const chunk of file.chunks) {
       const prompt = createPrompt(file, chunk, prDetails)
