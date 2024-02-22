@@ -35,6 +35,7 @@ const OPENAI_API_PROMPT = core.getInput('OPENAI_API_PROMPT');
 const openai = new openai_1.default({
     apiKey: OPENAI_API_KEY
 });
+// todo
 async function analyzeCode(parsedDiff, prDetails) {
     const comments = [];
     for (const file of parsedDiff) {
@@ -47,8 +48,6 @@ async function analyzeCode(parsedDiff, prDetails) {
       ${prompt}`);
             const aiResponse = await getAIResponse(prompt);
             if (aiResponse) {
-                console.info(`Response:`);
-                console.info(aiResponse);
                 const newComments = createComment(file, aiResponse);
                 if (newComments) {
                     comments.push(...newComments);
@@ -105,6 +104,8 @@ async function getAIResponse(prompt) {
                 }
             ]
         });
+        console.info(`Response:`);
+        console.info(response);
         const res = response.choices[0].message?.content?.trim() || '{}';
         return JSON.parse(res).reviews;
     }
