@@ -5,8 +5,7 @@ import { prDetails } from './prDetails'
 
 const OPENAI_API_KEY: string = core.getInput('OPENAI_API_KEY')
 const OPENAI_API_MODEL: string = core.getInput('OPENAI_API_MODEL')
-console.log(`Key is: ${OPENAI_API_KEY}`)
-console.log(`Model is: ${OPENAI_API_MODEL}`)
+
 const openai = new OpenAI({
   apiKey: OPENAI_API_KEY
 })
@@ -19,6 +18,8 @@ export async function analyzeCode(
 
   for (const file of parsedDiff) {
     if (file.to === '/dev/null') continue // Ignore deleted files
+    console.info(`the Key is: ${OPENAI_API_KEY}`)
+    console.info(`Model is: ${OPENAI_API_MODEL}`)
     console.info(`Analyzing the file: '${file.to}...` )
     for (const chunk of file.chunks) {
       const prompt = createPrompt(file, chunk, prDetails)
