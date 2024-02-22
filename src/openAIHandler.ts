@@ -3,7 +3,7 @@ import OpenAI from 'openai'
 import { Chunk, File } from 'parse-diff'
 import { prDetails } from './prDetails'
 
-const OPENAI_API_KEY: string = core.getInput('OPENAI_API_KEY')
+const OPENAI_API_KEY: string = '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'//core.getInput('OPENAI_API_KEY')
 const OPENAI_API_MODEL: string = core.getInput('OPENAI_API_MODEL')
 
 const openai = new OpenAI({
@@ -15,11 +15,19 @@ export async function analyzeCode(
   prDetails: prDetails
 ): Promise<Array<{ body: string; path: string; line: number }>> {
   const comments: Array<{ body: string; path: string; line: number }> = []
+  console.info(`the Key is: ${OPENAI_API_KEY}`)
+  console.info(`the Model is: ${OPENAI_API_MODEL}`)
+
+  if (OPENAI_API_KEY) {
+    console.info(`The value of OPENAI_API_KEY is: ${OPENAI_API_KEY}`);
+    // Your code that uses OPENAI_API_KEY goes here
+  } else {
+    console.info('Unable to retrieve the value of OPENAI_API_KEY.');
+  }
 
   for (const file of parsedDiff) {
     if (file.to === '/dev/null') continue // Ignore deleted files
-    console.info(`the Key is: ${OPENAI_API_KEY}`)
-    console.info(`Model is: ${OPENAI_API_MODEL}`)
+    
     console.info(`Analyzing the file: '${file.to}...` )
     for (const chunk of file.chunks) {
       const prompt = createPrompt(file, chunk, prDetails)
