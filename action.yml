@@ -22,8 +22,8 @@ inputs:
   OPENAI_API_PROMPT:
     description: 'OpenAI API prompt instructions about how to review the code.'
     required: false
-  exclude:
-    description: 'Glob patterns to exclude files from the diff analysis'
+  OPENAI_IGNORE_FILES:
+    description: 'Glob patterns to ignore files from the diff analysis'
     required: false
     default: ''
 

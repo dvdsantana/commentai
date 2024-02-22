@@ -32,9 +32,9 @@ const core = __importStar(require("@actions/core"));
 const rest_1 = require("@octokit/rest");
 const parse_diff_1 = __importDefault(require("parse-diff"));
 const minimatch_1 = require("minimatch");
+const OPENAI_IGNORE_FILES = core.getInput('OPENAI_IGNORE_FILES');
 const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
 const octokit = new rest_1.Octokit({ auth: GITHUB_TOKEN });
-//todo
 async function getPRDetails() {
     const { repository, number } = JSON.parse((0, fs_1.readFileSync)(process.env.GITHUB_EVENT_PATH || '', 'utf8'));
     const prResponse = await octokit.pulls.get({
@@ -65,8 +65,7 @@ async function getDifferencesToAnalize(prDetails) {
     let diff;
     diff = await getAllDifferences(prDetails);
     const parsedDiff = (0, parse_diff_1.default)(diff);
-    const excludePatterns = core
-        .getInput('exclude')
+    const excludePatterns = OPENAI_IGNORE_FILES
         .split(',')
         .map(s => s.trim());
     const filteredDiff = parsedDiff.filter(file => {

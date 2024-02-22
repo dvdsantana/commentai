@@ -5,9 +5,10 @@ import { prDetails } from './prDetails'
 import parseDiff from 'parse-diff'
 import { minimatch } from 'minimatch'
 
+const OPENAI_IGNORE_FILES = core.getInput('OPENAI_IGNORE_FILES')
 const GITHUB_TOKEN: string = core.getInput('GITHUB_TOKEN')
 const octokit = new Octokit({ auth: GITHUB_TOKEN })
-//todo
+
 export async function getPRDetails(): Promise<prDetails> {
   const { repository, number } = JSON.parse(
     readFileSync(process.env.GITHUB_EVENT_PATH || '', 'utf8')
@@ -17,6 +18,7 @@ export async function getPRDetails(): Promise<prDetails> {
     repo: repository.name,
     pull_number: number
   })
+
   return {
     owner: repository.owner.login,
     repo: repository.name,
@@ -50,8 +52,7 @@ export async function getDifferencesToAnalize(
 
   const parsedDiff = parseDiff(diff)
 
-  const excludePatterns = core
-    .getInput('exclude')
+  const excludePatterns = OPENAI_IGNORE_FILES
     .split(',')
     .map(s => s.trim())
 
@@ -108,6 +109,7 @@ async function getDiffFromPull(
     pull_number,
     mediaType: { format: 'diff' }
   })
+
   // @ts-expect-error - response.data is a string
   return response.data
 }
@@ -127,5 +129,6 @@ async function getDiffFromCommitComparision(
     basehead: `${base}...${head}`,
     per_page: 50
   })
+
   return String(response.data)
 }

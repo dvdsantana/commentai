@@ -10,7 +10,7 @@ const OPENAI_API_PROMPT: string = core.getInput('OPENAI_API_PROMPT')
 const openai = new OpenAI({
   apiKey: OPENAI_API_KEY
 })
-// todo
+
 export async function analyzeCode(
   parsedDiff: File[],
   prDetails: prDetails
@@ -23,8 +23,6 @@ export async function analyzeCode(
     console.info(`Analyzing the file: '${file.to}...` )
     for (const chunk of file.chunks) {
       const prompt = createPrompt(file, chunk, prDetails)
-      console.info(`Sending the prompt:
-      ${prompt}`)
       const aiResponse = await getAIResponse(prompt)
       if (aiResponse) {
         const newComments = createComment(file, aiResponse)
@@ -34,6 +32,7 @@ export async function analyzeCode(
       }
     }
   }
+
   return comments
 }
 
@@ -71,16 +70,15 @@ async function getAIResponse(prompt: string): Promise<Array<{
     max_tokens: 700,
     top_p: 1, // Defaults to 1
     frequency_penalty: 0, // Defaults to 0
-    presence_penalty: 0 // Defaults to 0
+    presence_penalty: 0, // Defaults to 0
   }
 
   try {
     const response = await openai.chat.completions.create({
       ...queryConfig,
-      // return JSON if the model supports it:
-      ...(OPENAI_API_MODEL === 'gpt-4-0125-preview' || OPENAI_API_MODEL === 'gpt-3.5-turbo-1106'
-        ? { response_format: { type: 'json_object' } }
-        : {}),
+      // return JSON if the model supports it
+      // all GPT-4 Turbo and GPT-3.5 Turbo models newer than `gpt-3.5-turbo-1106`
+      response_format: { type: 'json_object' },
       messages: [
         {
           role: 'user',
@@ -89,12 +87,11 @@ async function getAIResponse(prompt: string): Promise<Array<{
       ]
     })
 
-    console.info(`Response:`)
-    console.info(JSON.stringify(response.choices[0].message, null, 4))
     const res = response.choices[0].message?.content?.trim() || '{}'
     return JSON.parse(res).reviews
   } catch (error) {
-    console.error('Error:', error)
+    console.error('Error getting the GPT response:', error)
+    
     return null
   }
 }
