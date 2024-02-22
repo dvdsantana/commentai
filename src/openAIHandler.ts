@@ -89,7 +89,7 @@ async function getAIResponse(prompt: string): Promise<Array<{
       ]
     })
 
-    console.info(`Response is:`)
+    console.info(`Response is`)
     console.info(response)
     const res = response.choices[0].message?.content?.trim() || '{}'
     return JSON.parse(res).reviews
