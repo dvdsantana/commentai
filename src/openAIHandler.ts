@@ -5,8 +5,8 @@ import { prDetails } from './prDetails'
 
 const OPENAI_API_KEY: string = core.getInput('OPENAI_API_KEY')
 const OPENAI_API_MODEL: string = core.getInput('OPENAI_API_MODEL')
-console.log(`the Key is: ${OPENAI_API_KEY}`)
-console.log(`Model is: ${OPENAI_API_MODEL}`)
+console.info(`the Key is: ${OPENAI_API_KEY}`)
+console.info(`Model is: ${OPENAI_API_MODEL}`)
 const openai = new OpenAI({
   apiKey: OPENAI_API_KEY
 })
