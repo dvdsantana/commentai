@@ -22,7 +22,7 @@ export async function analyzeCode(
     console.log(`The value of OPENAI_API_KEY is: ${OPENAI_API_KEY}`);
     // Your code that uses OPENAI_API_KEY goes here
   } else {
-    console.error('Unable to retrieve the value of OPENAI_API_KEY.');
+    console.error('Unable to retrieve the value of OPENAI_API_KEY.')
   }
 
   for (const file of parsedDiff) {
