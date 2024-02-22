@@ -12,7 +12,7 @@ async function run() {
     const filteredDiff = await (0, prHandler_1.getDifferencesToAnalize)(prDetails);
     const comments = await (0, openAIHandler_1.analyzeCode)(filteredDiff, prDetails);
     if (comments.length === 0) {
-        console.info('Good job, buddy! Nothing to comment');
+        console.info('Alright! Nothing to comment');
         return;
     }
     await (0, prHandler_1.createReviewComment)(prDetails.owner, prDetails.repo, prDetails.pull_number, comments);

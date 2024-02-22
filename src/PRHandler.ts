@@ -91,7 +91,7 @@ async function getAllDifferences(prDetails: prDetails): Promise<string | null> {
   }
 
   if (!diff) {
-    console.log('No diff found')
+    console.info('No diff found')
     return null
   }
 

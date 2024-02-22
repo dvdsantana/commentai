@@ -20,13 +20,14 @@ export async function analyzeCode(
   for (const file of parsedDiff) {
     if (file.to === '/dev/null') continue // Ignore deleted files
     
-    console.info(`Analyzing the file: '${file.to}...` )
+    console.info(`Analyzing the file: '${file.to} ...` )
     for (const chunk of file.chunks) {
       const prompt = createPrompt(file, chunk, prDetails)
       const aiResponse = await getAIResponse(prompt)
       if (aiResponse) {
         const newComments = createComment(file, aiResponse)
         if (newComments) {
+          console.info(`Some comments has been added to the file: ${file.to}`)
           comments.push(...newComments)
         }
       }

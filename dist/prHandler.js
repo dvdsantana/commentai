@@ -90,7 +90,7 @@ async function getAllDifferences(prDetails) {
         return null;
     }
     if (!diff) {
-        console.log('No diff found');
+        console.info('No diff found');
         return null;
     }
     return diff;
