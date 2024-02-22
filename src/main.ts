@@ -12,9 +12,7 @@ import {
  */
 export async function run(): Promise<void> {
   const prDetails = await getPRDetails()
-  let filteredDiff: parseDiff.File[]
-
-  filteredDiff = await getDifferencesToAnalize(prDetails)
+  const filteredDiff = await getDifferencesToAnalize(prDetails)
 
   const comments = await analyzeCode(filteredDiff, prDetails)
 

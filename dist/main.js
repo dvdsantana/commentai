@@ -9,8 +9,7 @@ const prHandler_1 = require("./prHandler");
  */
 async function run() {
     const prDetails = await (0, prHandler_1.getPRDetails)();
-    let filteredDiff;
-    filteredDiff = await (0, prHandler_1.getDifferencesToAnalize)(prDetails);
+    const filteredDiff = await (0, prHandler_1.getDifferencesToAnalize)(prDetails);
     const comments = await (0, openAIHandler_1.analyzeCode)(filteredDiff, prDetails);
     if (comments.length === 0) {
         console.log('Alright! Nothing to comment');
