@@ -35,6 +35,7 @@ const OPENAI_API_PROMPT = core.getInput('OPENAI_API_PROMPT');
 const openai = new openai_1.default({
     apiKey: OPENAI_API_KEY
 });
+// todo
 async function analyzeCode(parsedDiff, prDetails) {
     const comments = [];
     for (const file of parsedDiff) {

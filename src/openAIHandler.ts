@@ -10,7 +10,7 @@ const OPENAI_API_PROMPT: string = core.getInput('OPENAI_API_PROMPT')
 const openai = new OpenAI({
   apiKey: OPENAI_API_KEY
 })
-
+// todo
 export async function analyzeCode(
   parsedDiff: File[],
   prDetails: prDetails
