@@ -1,4 +1,3 @@
-import parseDiff from 'parse-diff'
 import { analyzeCode } from './openAIHandler'
 import {
   createReviewComment,
