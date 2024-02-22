@@ -47,6 +47,8 @@ async function analyzeCode(parsedDiff, prDetails) {
       ${prompt}`);
             const aiResponse = await getAIResponse(prompt);
             if (aiResponse) {
+                console.info(`Response:`);
+                console.info(aiResponse);
                 const newComments = createComment(file, aiResponse);
                 if (newComments) {
                     comments.push(...newComments);
