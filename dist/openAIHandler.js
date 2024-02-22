@@ -29,6 +29,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.analyzeCode = void 0;
 const core = __importStar(require("@actions/core"));
 const openai_1 = __importDefault(require("openai"));
+//
 const OPENAI_API_KEY = core.getInput('OPENAI_API_KEY');
 const OPENAI_API_MODEL = core.getInput('OPENAI_API_MODEL');
 const openai = new openai_1.default({
@@ -46,7 +47,7 @@ async function analyzeCode(parsedDiff, prDetails) {
       ${prompt}`);
             const aiResponse = await getAIResponse(prompt);
             if (aiResponse) {
-                const newComments = createComment(file, chunk, aiResponse);
+                const newComments = createComment(file, aiResponse);
                 if (newComments) {
                     comments.push(...newComments);
                 }
@@ -57,7 +58,6 @@ async function analyzeCode(parsedDiff, prDetails) {
 }
 exports.analyzeCode = analyzeCode;
 function createPrompt(file, chunk, prDetails) {
-    return `Tell me a joke about developers`;
     return `Your task is to review pull requests. Instructions:
   - Provide the response in following JSON format:  {'reviews': [{'lineNumber':  <line_number>, 'reviewComment': '<review comment>'}]}
   - Do not give positive comments or compliments.
@@ -89,17 +89,17 @@ function createPrompt(file, chunk, prDetails) {
 async function getAIResponse(prompt) {
     const queryConfig = {
         model: OPENAI_API_MODEL,
-        temperature: 0.2,
+        temperature: 0.2, // Defaults to 1
         max_tokens: 700,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0
+        top_p: 1, // Defaults to 1
+        frequency_penalty: 0, // Defaults to 0
+        presence_penalty: 0 // Defaults to 0
     };
     try {
         const response = await openai.chat.completions.create({
             ...queryConfig,
             // return JSON if the model supports it:
-            ...(OPENAI_API_MODEL === 'gpt-4-1106-preview'
+            ...(OPENAI_API_MODEL === 'gpt-4-0125-preview' || OPENAI_API_MODEL === 'gpt-3.5-turbo-1106'
                 ? { response_format: { type: 'json_object' } }
                 : {}),
             messages: [
@@ -117,7 +117,7 @@ async function getAIResponse(prompt) {
         return null;
     }
 }
-function createComment(file, chunk, aiResponses) {
+function createComment(file, aiResponses) {
     return aiResponses.flatMap(aiResponse => {
         if (!file.to) {
             return [];
