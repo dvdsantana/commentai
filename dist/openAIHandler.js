@@ -31,6 +31,7 @@ const core = __importStar(require("@actions/core"));
 const openai_1 = __importDefault(require("openai"));
 const OPENAI_API_KEY = core.getInput('OPENAI_API_KEY');
 const OPENAI_API_MODEL = core.getInput('OPENAI_API_MODEL');
+const OPENAI_API_PROMPT = core.getInput('OPENAI_API_PROMPT');
 const openai = new openai_1.default({
     apiKey: OPENAI_API_KEY
 });
@@ -39,8 +40,6 @@ async function analyzeCode(parsedDiff, prDetails) {
     for (const file of parsedDiff) {
         if (file.to === '/dev/null')
             continue; // Ignore deleted files
-        console.info(`the Key is: ${OPENAI_API_KEY}`);
-        console.info(`Model is: ${OPENAI_API_MODEL}`);
         console.info(`Analyzing the file: '${file.to}...`);
         for (const chunk of file.chunks) {
             const prompt = createPrompt(file, chunk, prDetails);
@@ -48,7 +47,7 @@ async function analyzeCode(parsedDiff, prDetails) {
       ${prompt}`);
             const aiResponse = await getAIResponse(prompt);
             if (aiResponse) {
-                const newComments = createComment(file, chunk, aiResponse);
+                const newComments = createComment(file, aiResponse);
                 if (newComments) {
                     comments.push(...newComments);
                 }
@@ -59,14 +58,7 @@ async function analyzeCode(parsedDiff, prDetails) {
 }
 exports.analyzeCode = analyzeCode;
 function createPrompt(file, chunk, prDetails) {
-    return `Tell me a joke about developers`;
-    return `Your task is to review pull requests. Instructions:
-  - Provide the response in following JSON format:  {'reviews': [{'lineNumber':  <line_number>, 'reviewComment': '<review comment>'}]}
-  - Do not give positive comments or compliments.
-  - Provide comments and suggestions ONLY if there is something to improve, otherwise 'reviews' should be an empty array.
-  - Write the comment in GitHub Markdown format.
-  - Use the given description only for the overall context and only comment the code.
-  - IMPORTANT: NEVER suggest adding comments to the code.
+    return `${OPENAI_API_PROMPT}
   
   Review the following code diff in the file '${file.to}' and take the pull request title and description into account when writing the response.
     
@@ -103,7 +95,7 @@ async function getAIResponse(prompt) {
             // return JSON if the model supports it:
             ...(OPENAI_API_MODEL === 'gpt-4-0125-preview' || OPENAI_API_MODEL === 'gpt-3.5-turbo-1106'
                 ? { response_format: { type: 'json_object' } }
-                : { response_format: { type: 'text' } }),
+                : {}),
             messages: [
                 {
                     role: 'user',
@@ -119,7 +111,7 @@ async function getAIResponse(prompt) {
         return null;
     }
 }
-function createComment(file, chunk, aiResponses) {
+function createComment(file, aiResponses) {
     return aiResponses.flatMap(aiResponse => {
         if (!file.to) {
             return [];

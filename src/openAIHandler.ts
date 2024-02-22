@@ -3,8 +3,9 @@ import OpenAI from 'openai'
 import { Chunk, File } from 'parse-diff'
 import { prDetails } from './prDetails'
 
-const OPENAI_API_KEY: string = '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'//core.getInput('OPENAI_API_KEY')
+const OPENAI_API_KEY: string = core.getInput('OPENAI_API_KEY')
 const OPENAI_API_MODEL: string = core.getInput('OPENAI_API_MODEL')
+const OPENAI_API_PROMPT: string = core.getInput('OPENAI_API_PROMPT')
 
 const openai = new OpenAI({
   apiKey: OPENAI_API_KEY
@@ -15,15 +16,6 @@ export async function analyzeCode(
   prDetails: prDetails
 ): Promise<Array<{ body: string; path: string; line: number }>> {
   const comments: Array<{ body: string; path: string; line: number }> = []
-  console.info(`the Key is: ${OPENAI_API_KEY}`)
-  console.info(`the Model is: ${OPENAI_API_MODEL}`)
-
-  if (OPENAI_API_KEY) {
-    console.info(`The value of OPENAI_API_KEY is: ${OPENAI_API_KEY}`);
-    // Your code that uses OPENAI_API_KEY goes here
-  } else {
-    console.info('Unable to retrieve the value of OPENAI_API_KEY.');
-  }
 
   for (const file of parsedDiff) {
     if (file.to === '/dev/null') continue // Ignore deleted files
@@ -35,7 +27,7 @@ export async function analyzeCode(
       ${prompt}`)
       const aiResponse = await getAIResponse(prompt)
       if (aiResponse) {
-        const newComments = createComment(file, chunk, aiResponse)
+        const newComments = createComment(file, aiResponse)
         if (newComments) {
           comments.push(...newComments)
         }
@@ -46,14 +38,7 @@ export async function analyzeCode(
 }
 
 function createPrompt(file: File, chunk: Chunk, prDetails: prDetails): string {
-  return `Tell me a joke about developers`;
-  return `Your task is to review pull requests. Instructions:
-  - Provide the response in following JSON format:  {'reviews': [{'lineNumber':  <line_number>, 'reviewComment': '<review comment>'}]}
-  - Do not give positive comments or compliments.
-  - Provide comments and suggestions ONLY if there is something to improve, otherwise 'reviews' should be an empty array.
-  - Write the comment in GitHub Markdown format.
-  - Use the given description only for the overall context and only comment the code.
-  - IMPORTANT: NEVER suggest adding comments to the code.
+  return `${OPENAI_API_PROMPT}
   
   Review the following code diff in the file '${file.to}' and take the pull request title and description into account when writing the response.
     
@@ -95,7 +80,7 @@ async function getAIResponse(prompt: string): Promise<Array<{
       // return JSON if the model supports it:
       ...(OPENAI_API_MODEL === 'gpt-4-0125-preview' || OPENAI_API_MODEL === 'gpt-3.5-turbo-1106'
         ? { response_format: { type: 'json_object' } }
-        : { response_format: { type: 'text' }}),
+        : {}),
       messages: [
         {
           role: 'user',
@@ -114,7 +99,6 @@ async function getAIResponse(prompt: string): Promise<Array<{
 
 function createComment(
   file: File,
-  chunk: Chunk,
   aiResponses: Array<{
     lineNumber: string
     reviewComment: string
