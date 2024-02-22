@@ -27,8 +27,6 @@ export async function analyzeCode(
       ${prompt}`)
       const aiResponse = await getAIResponse(prompt)
       if (aiResponse) {
-        console.info(`Response:`)
-        console.info(aiResponse)
         const newComments = createComment(file, aiResponse)
         if (newComments) {
           comments.push(...newComments)
@@ -91,6 +89,8 @@ async function getAIResponse(prompt: string): Promise<Array<{
       ]
     })
 
+    console.info(`Response:`)
+    console.info(response)
     const res = response.choices[0].message?.content?.trim() || '{}'
     return JSON.parse(res).reviews
   } catch (error) {
