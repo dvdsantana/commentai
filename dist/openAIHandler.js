@@ -57,6 +57,7 @@ async function analyzeCode(parsedDiff, prDetails) {
 }
 exports.analyzeCode = analyzeCode;
 function createPrompt(file, chunk, prDetails) {
+    return `Tell me a joke about developers`;
     return `Your task is to review pull requests. Instructions:
   - Provide the response in following JSON format:  {'reviews': [{'lineNumber':  <line_number>, 'reviewComment': '<review comment>'}]}
   - Do not give positive comments or compliments.

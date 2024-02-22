@@ -36,6 +36,7 @@ export async function analyzeCode(
 }
 
 function createPrompt(file: File, chunk: Chunk, prDetails: prDetails): string {
+  return `Tell me a joke about developers`;
   return `Your task is to review pull requests. Instructions:
   - Provide the response in following JSON format:  {'reviews': [{'lineNumber':  <line_number>, 'reviewComment': '<review comment>'}]}
   - Do not give positive comments or compliments.
@@ -44,9 +45,7 @@ function createPrompt(file: File, chunk: Chunk, prDetails: prDetails): string {
   - Use the given description only for the overall context and only comment the code.
   - IMPORTANT: NEVER suggest adding comments to the code.
   
-  Review the following code diff in the file '${
-    file.to
-  }' and take the pull request title and description into account when writing the response.
+  Review the following code diff in the file '${file.to}' and take the pull request title and description into account when writing the response.
     
   Pull request title: ${prDetails.title}
   Pull request description:
