@@ -72,20 +72,20 @@ async function getAIResponse(prompt: string): Promise<Array<{
 }> | null> {
   const queryConfig = {
     model: OPENAI_API_MODEL,
-    temperature: 0.2,
+    temperature: 0.2, // Defaults to 1
     max_tokens: 700,
-    top_p: 1,
-    frequency_penalty: 0,
-    presence_penalty: 0
+    top_p: 1, // Defaults to 1
+    frequency_penalty: 0, // Defaults to 0
+    presence_penalty: 0 // Defaults to 0
   }
 
   try {
     const response = await openai.chat.completions.create({
       ...queryConfig,
       // return JSON if the model supports it:
-      ...(OPENAI_API_MODEL === 'gpt-4-1106-preview'
+      ...(OPENAI_API_MODEL === 'gpt-4-0125-preview' || OPENAI_API_MODEL === 'gpt-3.5-turbo-1106'
         ? { response_format: { type: 'json_object' } }
-        : {}),
+        : { response_format: { type: 'text' }}),
       messages: [
         {
           role: 'user',
