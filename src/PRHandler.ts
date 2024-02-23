@@ -69,7 +69,7 @@ async function getAllDifferences(prDetails: prDetails): Promise<string | null> {
     readFileSync(process.env.GITHUB_EVENT_PATH ?? '', 'utf8')
   )
 
-  if (eventData.action === 'opened') {
+  if (eventData.action === 'review_requested' || eventData.action === 'opened') {
     diff = await getDiffFromPull(
       prDetails.owner,
       prDetails.repo,
