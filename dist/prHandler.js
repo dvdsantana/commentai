@@ -77,7 +77,7 @@ exports.getDifferencesToAnalize = getDifferencesToAnalize;
 async function getAllDifferences(prDetails) {
     let diff;
     const eventData = JSON.parse((0, fs_1.readFileSync)(process.env.GITHUB_EVENT_PATH ?? '', 'utf8'));
-    if (eventData.action === 'opened') {
+    if (eventData.action === 'review_requested' || eventData.action === 'opened') {
         diff = await getDiffFromPull(prDetails.owner, prDetails.repo, prDetails.pull_number);
     }
     else if (eventData.action === 'synchronize') {
