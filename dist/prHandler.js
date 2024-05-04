@@ -69,9 +69,8 @@ async function getDifferencesToAnalize(prDetails) {
     const excludePatterns = OPENAI_IGNORE_FILES
         .split(',')
         .map(s => s.trim());
-    console.log(excludePatterns);
     const filteredDiff = parsedDiff.filter(file => {
-        console.log(file.to);
+        console.info(file.to);
         return !excludePatterns.some(pattern => (0, minimatch_1.minimatch)(file.to ?? '', pattern));
     });
     return filteredDiff;
@@ -120,4 +119,4 @@ async function getDiffFromCommitComparision(owner, repo, base, head) {
     });
     return String(response.data);
 }
-//# sourceMappingURL=PRHandler.js.map
+//# sourceMappingURL=prHandler.js.map
