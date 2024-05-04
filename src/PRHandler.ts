@@ -63,7 +63,6 @@ export async function getDifferencesToAnalize(
     return !excludePatterns.some(pattern => minimatch(file.to ?? '', pattern))
   })
 
-
   return filteredDiff
 }
 
