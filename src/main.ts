@@ -4,6 +4,7 @@ import {
   getPRDetails,
   getDifferencesToAnalize
 } from './prHandler'
+import * as core from '@actions/core'
 
 /**
  * The main function for the action.
@@ -16,6 +17,7 @@ export async function run(): Promise<void> {
   const comments = await analyzeCode(filteredDiff, prDetails)
 
   if (comments.length === 0) {
+    console.log('Files excluded: ' +  core.getInput('OPENAI_IGNORE_FILES'))
     console.log('Alright! Nothing to comment')
     return
   }
