@@ -56,6 +56,10 @@ export async function getDifferencesToAnalize(
     .split(',')
     .map(s => s.trim())
 
+  // const filteredDiff = parsedDiff.filter(file => {
+  //   return !excludePatterns.some(pattern => minimatch(file.to ?? '', pattern))
+  // })
+
   const filteredDiff = parsedDiff.filter(file => {
     console.info(file.to)
     return !excludePatterns.some(pattern => minimatch(file.to ?? '', pattern))
