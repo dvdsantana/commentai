@@ -18,7 +18,7 @@ export async function getPRDetails(): Promise<prDetails> {
     repo: repository.name,
     pull_number: number
   })
-
+// TODO: This is an important bug
   return {
     owner: repository.owner.login,
     repo: repository.name,
