@@ -3,7 +3,6 @@ import * as core from '@actions/core'
 import { Octokit } from '@octokit/rest'
 import { prDetails } from './prDetails'
 import parseDiff from 'parse-diff'
-import { minimatch } from 'minimatch'
 
 const OPENAI_IGNORE_FILES = core.getInput('OPENAI_IGNORE_FILES')
 const GITHUB_TOKEN: string = core.getInput('GITHUB_TOKEN')
@@ -55,10 +54,6 @@ export async function getDifferencesToAnalize(
   const excludePatterns = OPENAI_IGNORE_FILES
     .split(',')
     .map(s => s.trim())
-
-  // const filteredDiff = parsedDiff.filter(file => {
-  //   return !excludePatterns.some(pattern => minimatch(file.to ?? '', pattern))
-  // })
 
   const filteredDiff = parsedDiff.filter(file => {
     return !excludePatterns.some(pattern => {
