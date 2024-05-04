@@ -119,4 +119,4 @@ async function getDiffFromCommitComparision(owner, repo, base, head) {
     });
     return String(response.data);
 }
-//# sourceMappingURL=prHandler.js.map
+//# sourceMappingURL=PRHandler.js.map
