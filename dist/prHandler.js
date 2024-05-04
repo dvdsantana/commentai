@@ -31,7 +31,6 @@ const fs_1 = require("fs");
 const core = __importStar(require("@actions/core"));
 const rest_1 = require("@octokit/rest");
 const parse_diff_1 = __importDefault(require("parse-diff"));
-const minimatch_1 = require("minimatch");
 const OPENAI_IGNORE_FILES = core.getInput('OPENAI_IGNORE_FILES');
 const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
 const octokit = new rest_1.Octokit({ auth: GITHUB_TOKEN });
@@ -69,10 +68,14 @@ async function getDifferencesToAnalize(prDetails) {
     const excludePatterns = OPENAI_IGNORE_FILES
         .split(',')
         .map(s => s.trim());
-    console.log(excludePatterns);
+    // const filteredDiff = parsedDiff.filter(file => {
+    //   return !excludePatterns.some(pattern => minimatch(file.to ?? '', pattern))
+    // })
     const filteredDiff = parsedDiff.filter(file => {
-        console.log(file.to);
-        return !excludePatterns.some(pattern => (0, minimatch_1.minimatch)(file.to ?? '', pattern));
+        return !excludePatterns.some(pattern => {
+            const regex = new RegExp(pattern.replace(/\./g, '\\.').replace(/\*/g, '.*'));
+            return regex.test(file.to ?? '');
+        });
     });
     return filteredDiff;
 }
