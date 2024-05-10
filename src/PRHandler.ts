@@ -17,7 +17,7 @@ export async function getPRDetails(): Promise<prDetails> {
     repo: repository.name,
     pull_number: number
   })
-
+// TODO: This is an important bug.
   return {
     owner: repository.owner.login,
     repo: repository.name,
@@ -56,10 +56,9 @@ export async function getDifferencesToAnalize(
     .map(s => s.trim())
 
   const filteredDiff = parsedDiff.filter(file => {
-    return !excludePatterns.some(pattern => {
-      const regex = new RegExp(pattern);
-      return regex.test(file.to ?? '');
-    }));
+    console.info(file.to)
+    return !excludePatterns.some(pattern => minimatch(file.to ?? '', pattern))
+  })
 
   return filteredDiff
 }
