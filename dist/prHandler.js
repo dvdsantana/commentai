@@ -92,6 +92,7 @@ async function getAllDifferences(prDetails) {
     }
     else {
         console.error('Unsupported event:', process.env.GITHUB_EVENT_NAME);
+        console.error('Unsupported action:', eventData.action);
         return null;
     }
     if (!diff) {
