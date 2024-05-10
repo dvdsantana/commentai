@@ -11,7 +11,7 @@ on:
 permissions: write-all
 jobs:
   code_review:
-    if: ${{ github.event.label.name == 'openai_requested' }}
+    if: ${{ github.event.label.name == '🤖 openai_requested' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
