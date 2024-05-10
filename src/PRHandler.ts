@@ -88,6 +88,7 @@ async function getAllDifferences(prDetails: prDetails): Promise<string | null> {
     )
   } else {
     console.error('Unsupported event:', process.env.GITHUB_EVENT_NAME)
+    console.error('Unsupported action:', eventData.action)
     return null
   }
 
