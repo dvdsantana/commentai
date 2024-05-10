@@ -91,8 +91,7 @@ async function getAllDifferences(prDetails) {
         diff = await getDiffFromCommitComparision(prDetails.owner, prDetails.repo, newBaseSha, newHeadSha);
     }
     else {
-        console.error('Unsupported event:', process.env.GITHUB_EVENT_NAME);
-        console.error('Unsupported action:', eventData.action);
+        console.error('Unsupported event.type:', `${process.env.GITHUB_EVENT_NAME}.${eventData.action}`);
         return null;
     }
     if (!diff) {
