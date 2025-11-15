@@ -1,5 +1,6 @@
 # CommentAI 🤖
 _Give your team an AI-powered code review assistant today! 🚀_
+
 A GitHub Action that leverages AI models to automatically analyze and comment on pull requests, providing intelligent feedback to improve code quality and collaboration.
 
 ## Overview
