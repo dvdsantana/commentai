@@ -1,231 +1,94 @@
-# Create a GitHub Action Using TypeScript
+# CommentAI 🤖
+_Give your team an AI-powered code review assistant today! 🚀_
+A GitHub Action that leverages AI models to automatically analyze and comment on pull requests, providing intelligent feedback to improve code quality and collaboration.
 
-[![GitHub Super-Linter](https://github.com/actions/typescript-action/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
-![CI](https://github.com/actions/typescript-action/actions/workflows/ci.yml/badge.svg)
-[![Check dist/](https://github.com/actions/typescript-action/actions/workflows/check-dist.yml/badge.svg)](https://github.com/actions/typescript-action/actions/workflows/check-dist.yml)
-[![CodeQL](https://github.com/actions/typescript-action/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/actions/typescript-action/actions/workflows/codeql-analysis.yml)
-[![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
+## Overview
+CommentAI is an automated code review assistant that integrates directly into your GitHub workflow. When a pull request is opened or updated, this action calls an AI model to analyze the changes and post meaningful comments with suggestions, questions, and observations about the code.
 
-Use this template to bootstrap the creation of a TypeScript action. :rocket:
+## Features
+🤖 AI-Powered Analysis: Uses advanced AI models to understand code context and provide relevant feedback
 
-This template includes compilation support, tests, a validation workflow,
-publishing, and versioning guidance.
+🔧 Easy Integration: Simple setup with minimal configuration required
 
-If you are new, there's also a simpler introduction in the
-[Hello world JavaScript action repository](https://github.com/actions/hello-world-javascript-action).
+📝 Smart Comments: Provides constructive feedback on code changes
 
-## Create Your Own Action
+⚡ Real-time Processing: Automatically triggers on pull request events
 
-To create your own action, you can use this repository as a template! Just
-follow the below instructions:
+🛡 Safe & Secure: Runs in isolated GitHub Actions environment
 
-1. Click the **Use this template** button at the top of the repository
-1. Select **Create a new repository**
-1. Select an owner and name for your new repository
-1. Click **Create repository**
-1. Clone your new repository
+🔍 Context-Aware: Analyzes the entire PR context including files changed and commit messages
 
-> [!IMPORTANT]
->
-> Make sure to remove or update the [`CODEOWNERS`](./CODEOWNERS) file! For
-> details on how to use this file, see
-> [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners).
+## Quick Start
+### Prerequisites
+- GitHub repository with Actions enabled
+- Access to an AI model API (OpenAI, Anthropic, etc.)
+- API key for your chosen AI service
 
-## Initial Setup
+### Basic Setup
+1. Create a workflow file in your repository at .github/workflows/commentai.yml:
 
-After you've cloned the repository to your local machine or codespace, you'll
-need to perform some initial setup steps before you can develop your action.
-
-> [!NOTE]
->
-> You'll need to have a reasonably modern version of
-> [Node.js](https://nodejs.org) handy (20.x or later should work!). If you are
-> using a version manager like [`nodenv`](https://github.com/nodenv/nodenv) or
-> [`nvm`](https://github.com/nvm-sh/nvm), this template has a `.node-version`
-> file at the root of the repository that will be used to automatically switch
-> to the correct version when you `cd` into the repository. Additionally, this
-> `.node-version` file is used by GitHub Actions in any `actions/setup-node`
-> actions.
-
-1. :hammer_and_wrench: Install the dependencies
-
-   ```bash
-   npm install
-   ```
-
-1. :building_construction: Package the TypeScript for distribution
-
-   ```bash
-   npm run bundle
-   ```
-
-1. :white_check_mark: Run the tests
-
-   ```bash
-   $ npm test
-
-   PASS  ./index.test.js
-     ✓ throws invalid number (3ms)
-     ✓ wait 500 ms (504ms)
-     ✓ test runs (95ms)
-
-   ...
-   ```
-
-## Update the Action Metadata
-
-The [`action.yml`](action.yml) file defines metadata about your action, such as
-input(s) and output(s). For details about this file, see
-[Metadata syntax for GitHub Actions](https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions).
-
-When you copy this repository, update `action.yml` with the name, description,
-inputs, and outputs for your action.
-
-## Update the Action Code
-
-The [`src/`](./src/) directory is the heart of your action! This contains the
-source code that will be run when your action is invoked. You can replace the
-contents of this directory with your own code.
-
-There are a few things to keep in mind when writing your action code:
-
-- Most GitHub Actions toolkit and CI/CD operations are processed asynchronously.
-  In `main.ts`, you will see that the action is run in an `async` function.
-
-  ```javascript
-  import * as core from '@actions/core'
-  //...
-
-  async function run() {
-    try {
-      //...
-    } catch (error) {
-      core.setFailed(error.message)
-    }
-  }
-  ```
-
-  For more information about the GitHub Actions toolkit, see the
-  [documentation](https://github.com/actions/toolkit/blob/master/README.md).
-
-So, what are you waiting for? Go ahead and start customizing your action!
-
-1. Create a new branch
-
-   ```bash
-   git checkout -b releases/v1
-   ```
-
-1. Replace the contents of `src/` with your action code
-1. Add tests to `__tests__/` for your source code
-1. Format, test, and build the action
-
-   ```bash
-   npm run all
-   ```
-
-   > [!WARNING]
-   >
-   > This step is important! It will run [`ncc`](https://github.com/vercel/ncc)
-   > to build the final JavaScript action code with all dependencies included.
-   > If you do not run this step, your action will not work correctly when it is
-   > used in a workflow. This step also includes the `--license` option for
-   > `ncc`, which will create a license file for all of the production node
-   > modules used in your project.
-
-1. Commit your changes
-
-   ```bash
-   git add .
-   git commit -m "My first action is ready!"
-   ```
-
-1. Push them to your repository
-
-   ```bash
-   git push -u origin releases/v1
-   ```
-
-1. Create a pull request and get feedback on your action
-1. Merge the pull request into the `main` branch
-
-Your action is now published! :rocket:
-
-For information about versioning your action, see
-[Versioning](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-in the GitHub Actions toolkit.
-
-## Validate the Action
-
-You can now validate the action by referencing it in a workflow file. For
-example, [`ci.yml`](./.github/workflows/ci.yml) demonstrates how to reference an
-action in the same repository.
-
-```yaml
-steps:
-  - name: Checkout
-    id: checkout
-    uses: actions/checkout@v4
-
-  - name: Test Local Action
-    id: test-action
-    uses: ./
-    with:
-      milliseconds: 1000
-
-  - name: Print Output
-    id: output
-    run: echo "${{ steps.test-action.outputs.time }}"
 ```
+name: AI Code Reviewer
 
-For example workflow runs, check out the
-[Actions tab](https://github.com/actions/typescript-action/actions)! :rocket:
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - review_requested
+      - labeled
+permissions: write-all
+jobs:
+  code_review:
+    if: ${{ github.event.label.name == '🤖 openai_requested' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
 
-## Usage
-
-After testing, you can create version tag(s) that developers can use to
-reference different stable versions of your action. For more information, see
-[Versioning](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-in the GitHub Actions toolkit.
-
-To include the action in a workflow in another repository, you can use the
-`uses` syntax with the `@` symbol to reference a specific branch, tag, or commit
-hash.
-
-```yaml
-steps:
-  - name: Checkout
-    id: checkout
-    uses: actions/checkout@v4
-
-  - name: Test Local Action
-    id: test-action
-    uses: actions/typescript-action@v1 # Commit with the `v1` tag
-    with:
-      milliseconds: 1000
-
-  - name: Print Output
-    id: output
-    run: echo "${{ steps.test-action.outputs.time }}"
+      - name: AI Code Reviewer
+        uses: dvdsantana/commentai@main
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # The GITHUB_TOKEN is there by default so you just need to keep it like it is and not necessarily need to add it as secret as it will throw an error. [More Details](https://docs.github.com/en/actions/security-guides/automatic-token-authentication#about-the-github_token-secret)
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_API_MODEL: ${{ vars.OPENAI_API_MODEL }} # Optional: defaults to "gpt-3.5-turbo"
+          OPENAI_API_PROMPT: ${{ vars.OPEN_API_PROMPT }}
+          OPENAI_IGNORE_FILES: ${{ vars.OPENAI_IGNORE_FILES }} # Optional: exclude patterns separated by commas
 ```
+2. Add your API key as a repository secret:
+   - Go to your repository Settings → Secrets and variables → Actions
+   - Add a new secret named OPENAI_API_KEY with your API key
 
-## Publishing a New Release
+## Configuration Options
+| Input               | Description                 | Required | Default       |
+|---------------------|-----------------------------|----------|---------------|
+| GITHUB_TOKEN        | GitHub token for API access | Yes      |               |
+| OPENAI_API_KEY      | API key for OpenAI services | Yes      |               |
+| OPENAI_API_MODEL    | OpenAI model to use         | NO       | gpt-3.5-turbo |
+| OPENAI_API_PROMPT   | System prompt               | Yes      |               |
+| OPENAI_IGNORE_FILES | File patterns to exclude    | No       |               |
 
-This project includes a helper script, [`script/release`](./script/release)
-designed to streamline the process of tagging and pushing new releases for
-GitHub Actions.
+## Security Considerations
+🔐 Never hardcode API keys - always use GitHub Secrets
 
-GitHub Actions allows users to select a specific version of the action to use,
-based on release tags. This script simplifies this process by performing the
-following steps:
+🔍 Review AI suggestions before implementing them
 
-1. **Retrieving the latest release tag:** The script starts by fetching the most
-   recent release tag by looking at the local data available in your repository.
-1. **Prompting for a new release tag:** The user is then prompted to enter a new
-   release tag. To assist with this, the script displays the latest release tag
-   and provides a regular expression to validate the format of the new tag.
-1. **Tagging the new release:** Once a valid new tag is entered, the script tags
-   the new release.
-1. **Pushing the new tag to the remote:** Finally, the script pushes the new tag
-   to the remote repository. From here, you will need to create a new release in
-   GitHub and users can easily reference the new tag in their workflows.
+🛡 Be cautious with sensitive code - AI services may log interactions
+
+📜 Understand your AI provider's data usage policies
+
+## Troubleshooting
+### Common Issues
+**No comments are posted:**
+- [ ] Check that the workflow is triggering on PR events
+- [ ] Verify API key is correctly set as a repository secret
+- [ ] Ensure the GitHub token has appropriate permissions
+
+**Comments are irrelevant:**
+- [ ] Modify the system prompt to be more specific
+- [ ] Consider using a different AI model
+
+### Performance issues:
+- [ ] Use file patterns to exclude large directories
+- [ ] Consider running only on specific file types
